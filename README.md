@@ -1,73 +1,133 @@
-# React + TypeScript + Vite
+Here’s a detailed `README.md` draft for your **Skin Disease Analyze** project, including project description, setup instructions, dependencies, and usage. You can save it as `README.md` in your project root:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+````markdown
+# Skin Disease Analyze
 
-Currently, two official plugins are available:
+Skin Disease Analyze is a web-based AI-powered application that detects and analyzes various skin conditions using image uploads. The app provides detailed reports including condition name, affected area, confidence, accuracy, description, and recommendations for care.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project is built with **React**, **TypeScript**, and **Framer Motion**, and leverages several Radix UI components and other modern React libraries for an interactive and responsive experience.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- Upload skin images and get instant AI-based analysis
+- Detailed results with condition description and care recommendations
+- Smooth page transitions with Framer Motion
+- Interactive UI components using Radix UI and other libraries
+- Responsive design for desktop and mobile
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Live Demo
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+*(Optional: Add your hosted demo link here)*
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Seishiru/skin-disease-analyze.git
+cd skin-disease-analyze
+````
+
+Install dependencies:
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This project requires the following libraries, which are included in `package.json`:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+* **UI / Components**
+  `lucide-react`
+  `class-variance-authority`
+  `@radix-ui/react-accordion`
+  `@radix-ui/react-alert-dialog`
+  `@radix-ui/react-aspect-ratio`
+  `@radix-ui/react-avatar`
+  `@radix-ui/react-checkbox`
+  `@radix-ui/react-collapsible`
+  `@radix-ui/react-context-menu`
+  `@radix-ui/react-dialog`
+  `@radix-ui/react-dropdown-menu`
+  `@radix-ui/react-hover-card`
+  `@radix-ui/react-label`
+  `@radix-ui/react-menubar`
+  `@radix-ui/react-navigation-menu`
+  `@radix-ui/react-popover`
+  `@radix-ui/react-progress`
+  `@radix-ui/react-radio-group`
+  `@radix-ui/react-scroll-area`
+  `@radix-ui/react-select`
+  `@radix-ui/react-separator`
+  `@radix-ui/react-slider`
+  `@radix-ui/react-slot`
+  `@radix-ui/react-switch`
+  `@radix-ui/react-tabs`
+  `@radix-ui/react-toggle`
+  `@radix-ui/react-toggle-group`
+  `@radix-ui/react-tooltip`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* **Other Libraries**
+  `cmdk`
+  `embla-carousel-react`
+  `input-otp`
+  `next-themes`
+  `react-day-picker`
+  `react-hook-form`
+  `react-resizable-panels`
+  `recharts`
+  `sonner`
+  `vaul`
+
+---
+
+## Usage
+
+Run the development server:
+
+```bash
+npm start
 ```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
+
+---
+
+## File Structure
+
+```
+src/
+├─ components/        # React components (Header, HomePage, AboutPage, AnalysisPage, etc.)
+├─ ui/                # Custom UI components (Button, Card, Progress, etc.)
+├─ App.tsx            # Main application component
+└─ index.tsx          # React entry point
+```
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/YourFeature`
+3. Commit your changes: `git commit -m 'Add YourFeature'`
+4. Push to the branch: `git push origin feature/YourFeature`
+5. Open a Pull Request
+
+---
+
+## License
+
+MIT License © 2025 SkinAnalyze AI
+
+---
+
+## Notes
+
+* Always consult a dermatologist or healthcare professional for medical advice.
+* The app is for educational and research purposes only.
+
