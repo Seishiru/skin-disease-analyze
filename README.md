@@ -1,4 +1,3 @@
-Here’s a detailed `README.md` draft for your **Skin Disease Analyze** project, including project description, setup instructions, dependencies, and usage. You can save it as `README.md` in your project root:
 
 ````markdown
 # Skin Disease Analyze
