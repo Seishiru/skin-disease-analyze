@@ -8,7 +8,7 @@ IGNORE_FOLDERS = {".git", "__pycache__", "node_modules", "venv", "sg_env", "sg_e
 MAX_SAMPLES_PER_TYPE = 3
 
 # Set True to enforce the limit, False to show all files
-LIMIT_SAMPLES = True
+LIMIT_SAMPLES = False
 
 def print_tree(start_path, indent=""):
     items = sorted(os.listdir(start_path))

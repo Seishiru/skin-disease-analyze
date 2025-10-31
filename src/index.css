@@ -2320,3 +2320,24 @@ html {
     transform: rotate(360deg);
   }
 }
+
+:root {
+  /* Add these missing gradient colors */
+  --color-green-600: oklch(.627 .194 149.214);
+  --color-green-700: oklch(.527 .154 150.069);
+  --color-blue-600: oklch(.546 .245 262.881); /* You'll need to define this */
+  
+  /* Or use existing colors that work for gradients */
+  --color-blue-600: var(--color-blue-500); /* Fallback to blue-500 */
+}
+
+/* Or create a custom gradient class */
+.gradient-blink {
+  background: linear-gradient(90deg, var(--color-green-500), var(--color-blue-500));
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
