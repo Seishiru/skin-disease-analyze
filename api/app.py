@@ -1,5 +1,5 @@
 """
-Flask API for React frontend integration - FIXED PATHS
+Flask API for React frontend integration - Vercel Ready
 """
 
 from flask import Flask, request, jsonify
@@ -8,6 +8,9 @@ import os
 import uuid
 from werkzeug.utils import secure_filename
 import sys
+import base64
+import io
+from PIL import Image
 
 # Add the parent directory to Python path to import your ensemble module
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -24,33 +27,73 @@ except ImportError as e:
             self.class_names = ["Acne", "Eczema", "Melasma", "Rosacea", "Shingles"]
         
         def analyze_image(self, image_path):
-            # Fallback mock response for testing
+            # Fallback mock response for testing with annotated image
+            img = Image.open(image_path).convert("RGB")
+            
+            # Create a simple annotated image for demo
+            from PIL import ImageDraw, ImageFont
+            draw = ImageDraw.Draw(img)
+            
+            # Draw a sample bounding box
+            width, height = img.size
+            box = [width * 0.2, height * 0.2, width * 0.8, height * 0.8]
+            draw.rectangle(box, outline="red", width=3)
+            
+            # Add label
+            try:
+                font = ImageFont.truetype("arial.ttf", 20)
+            except:
+                font = ImageFont.load_default()
+            
+            label = "Eczema (0.85, 3 votes)"
+            text_bbox = draw.textbbox((box[0], box[1]), label, font=font)
+            text_width = text_bbox[2] - text_bbox[0]
+            text_height = text_bbox[3] - text_bbox[1]
+            
+            bg_coords = [box[0], box[1] - text_height - 4, box[0] + text_width + 8, box[1]]
+            draw.rectangle(bg_coords, fill="black")
+            draw.text((box[0] + 4, box[1] - text_height - 2), label, fill="white", font=font)
+            
+            # Convert to base64
+            buffered = io.BytesIO()
+            img.save(buffered, format="JPEG", quality=85)
+            annotated_image_b64 = f"data:image/jpeg;base64,{base64.b64encode(buffered.getvalue()).decode()}"
+            
             return {
                 'detections': [{
                     'class_name': 'Eczema',
                     'score': 0.85,
                     'votes': 3,
-                    'box': [100, 100, 200, 200]
+                    'box': box
                 }],
                 'total_detections': 1,
                 'total_models': 3,
                 'working_models': 3,
-                'annotated_image_path': None
+                'annotated_image': annotated_image_b64
             }
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for React frontend
 
-# Configuration - use absolute paths
+# Configuration - use absolute paths for local, /tmp for Vercel
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
-RESULTS_FOLDER = os.path.join(BASE_DIR, 'results-ensemble')
+
+# Use /tmp directory for Vercel compatibility (writable directory)
+if os.path.exists('/tmp'):
+    UPLOAD_FOLDER = '/tmp/uploads'
+    RESULTS_FOLDER = '/tmp/results-ensemble'
+else:
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+    RESULTS_FOLDER = os.path.join(BASE_DIR, 'results-ensemble')
+
 WEIGHTS_DIR = os.path.join(BASE_DIR, 'weights')
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(RESULTS_FOLDER, exist_ok=True)
 
 print(f"📁 Base directory: {BASE_DIR}")
+print(f"📁 Upload folder: {UPLOAD_FOLDER}")
+print(f"📁 Results folder: {RESULTS_FOLDER}")
 print(f"📁 Weights directory: {WEIGHTS_DIR}")
 
 # Initialize the ensemble model with correct paths
@@ -187,10 +230,12 @@ def analyze_skin():
             }
         }
         
-        # ADD THIS LINE: Include the annotated image in the response
+        # Include the annotated image in the response (FIXED: using 'annotated_image' not 'annotated_image_path')
         if result.get('annotated_image'):
             response['annotated_image'] = result['annotated_image']
             print("✅ Annotated image included in response")
+        else:
+            print("⚠️ No annotated image available in result")
         
         # Add detections
         for detection in result.get('detections', []):
@@ -210,14 +255,30 @@ def analyze_skin():
         
     except Exception as e:
         print(f"❌ Analysis error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': f'Analysis failed: {str(e)}'}), 500
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
     models_loaded = ensemble_model is not None
-    return jsonify({'status': 'healthy', 'models_loaded': models_loaded})
+    return jsonify({
+        'status': 'healthy', 
+        'models_loaded': models_loaded,
+        'environment': 'production' if os.path.exists('/tmp') else 'development'
+    })
+
+# Root endpoint for Vercel
+@app.route('/')
+def home():
+    return jsonify({
+        'message': 'Skin Disease Detection API',
+        'version': '1.0.0',
+        'endpoints': ['/api/analyze', '/api/health']
+    })
 
 if __name__ == '__main__':
+    print(f"🚀 Starting Flask server...")
     print(f"📁 Upload folder: {UPLOAD_FOLDER}")
     print(f"📁 Results folder: {RESULTS_FOLDER}")
     app.run(debug=True, port=5001, host='0.0.0.0')

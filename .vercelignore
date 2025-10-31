@@ -1,0 +1,5 @@
+weights/           # Exclude large model files for now
+uploads/
+results-ensemble/
+*.pth
+*.pt

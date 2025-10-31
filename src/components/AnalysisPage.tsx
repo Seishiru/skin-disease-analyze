@@ -8,7 +8,10 @@ import type { AnalysisResult } from './AnalysisResults';
 import { Loader2, Brain, X, CheckCircle, Download, Eye, EyeOff } from 'lucide-react';
 
 // API base URL
-const API_BASE = 'http://localhost:5001/api';
+// const API_BASE = 'http://localhost:5001/api';
+
+// For production, use relative path. Vercel will handle routing
+const API_BASE = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5001/api';
 
 export function AnalysisPage() {
   const [selectedImage, setSelectedImage] = useState<{ file: File; previewUrl: string } | null>(null);
